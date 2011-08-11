@@ -1,0 +1,9 @@
+VLAN List - .1.3.6.1.4.1.9.9.46.1.3.1.1.2
+MAC Table - .1.3.6.1.2.1.17.4.3.1.1
+Bridge # List - .1.3.6.1.2.1.17.4.3.1.2
+Interface Index - .1.3.6.1.2.1.17.1.4.1.2
+Interface Name - .1.3.6.1.2.1.31.1.1.1.1
+Interface Status - .1.3.6.1.2.1.2.2.1.8
+Admin Status - .1.3.6.1.2.1.2.2.1.7
+Interface Description - 1.3.6.1.2.1.31.1.1.1.18
+ARP Table - 1.3.6.1.2.1.4.22.1.2
