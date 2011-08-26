@@ -5,7 +5,8 @@ IFCONFIG=/sbin/ifconfig
 IPCALC=/usr/bin/ipcalc
 
 # If we didnt get a CLI argument of the interface, die
-if [[ $1 == "" ]]; then
+#if [[ $1 == "" ]]; then
+if [[ $#<1 ]]; then
 	echo "Usage: ./route.sh [interface]" >&2
 	exit 1
 fi
