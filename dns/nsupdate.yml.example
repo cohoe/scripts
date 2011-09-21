@@ -1,0 +1,4 @@
+dns_keyname: "my_dnskey"
+dns_key: "abcdefghijklmnop"
+dns_zone: "example.com"
+hostname: "host1"
