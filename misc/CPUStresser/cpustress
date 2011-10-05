@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo "Starting $1 stressing threads..."
+
+for ((i=1; i <= $1; i++))
+do
+	sh ~/bin/stressthread &
+done
+echo "Press enter to continue..."
+
+read cont
+
+echo "Killing worker threads..."
+for pid in `ps -ef | grep stressthread | grep -v grep | awk '{print $2}'`
+do
+	kill $pid
+	wait $pid 2>/dev/null
+done
+
