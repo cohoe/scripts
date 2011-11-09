@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Project MASON deployment script for Enterprise Linix 6
+# 
+# Author: Grant Cohoe (www.grantcohoe.com)
+
+SERVER_IP="129.21.49.246"
+
+TEMP_DIR=/tmp/nagios
+NRPE_CONF_DIR=/etc/nrpe.d/
+
+YUM_CMD=/usr/bin/yum
+WGET_CMD=/usr/bin/wget
+IPTABLES_CMD=/sbin/iptables
+SERVICE_CMD=/sbin/service
+
+mkdir -p $TEMP_DIR
+cd $TEMP_DIR
+
+$WGET_CMD http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm
+$YUM_CMD localinstall epel-release-6-5.noarch.rpm --nogpgcheck -y
+rm epel-release-6-5.noarch.rom
+
+$YUM_CMD install nagios-plugins-nrpe nrpe nagios-plugins-all -y
+
+cd $NRPE_CONF_DIR
+$WGET_CMD https://raw.github.com/jfeulner/Mason-nrpe/master/config.cfg mason.cfg
+
+$IPTABLES_CMD -I INPUT 1 -s $SERVER_IP -p tcp --dport 5666 -j ACCEPT
+$SERVICE_CMD iptables save
+
+$SERVICE_CMD nrpe restart
