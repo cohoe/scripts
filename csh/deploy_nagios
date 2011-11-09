@@ -24,7 +24,7 @@ rm -f epel-release-6-5.noarch.rom
 $YUM_CMD install nagios-plugins-nrpe nrpe nagios-plugins-all -y
 
 cd $NRPE_CONF_DIR
-$WGET_CMD https://raw.github.com/jfeulner/Mason-nrpe/master/config.cfg mason.cfg
+$WGET_CMD https://raw.github.com/jfeulner/Mason-nrpe/master/config.cfg
 
 $IPTABLES_CMD -I INPUT 1 -s $SERVER_IP -p tcp --dport 5666 -j ACCEPT
 $SERVICE_CMD iptables save
