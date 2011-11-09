@@ -19,7 +19,7 @@ cd $TEMP_DIR
 
 $WGET_CMD http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm
 $YUM_CMD localinstall epel-release-6-5.noarch.rpm --nogpgcheck -y
-rm epel-release-6-5.noarch.rom
+rm -f epel-release-6-5.noarch.rom
 
 $YUM_CMD install nagios-plugins-nrpe nrpe nagios-plugins-all -y
 
