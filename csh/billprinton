@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# CSH printer round-robin script
+#
+# Author: Grant Cohoe (www.grantcohoe.com)
+# November 12 2011
+
+if [ $(($RANDOM % 2)) -ne 0 ]; then
+	echo -e "update delete billprinton.csh.rit.edu\nsend\nupdate add billprinton.csh.rit.edu 3600 CNAME hillaryprinton.csh.rit.edu\nsend\nquit\n" | /root/bin/csh-nsupdate
+else
+	echo -e "update delete billprinton.csh.rit.edu\nsend\nupdate add billprinton.csh.rit.edu 3600 CNAME monicalewprinski.csh.rit.edu\nsend\nquit\n" | /root/bin/csh-nsupdate
+fi
