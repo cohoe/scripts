@@ -21,7 +21,7 @@
 use strict;
 use warnings;
 
-my $realm = `cat /etc/resolv.conf | egrep -e "^search" | awk '{print \$2}' | tr '[:lower:]' '[:upper:]'`;
+my $realm = `cat /etc/krb5.conf | grep default_realm | awk '{print \$3}'`;
 chomp $realm;
 my $principal = `find /var/* -name principal`;
 chomp $principal;
