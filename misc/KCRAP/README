@@ -1,0 +1,13 @@
+KCRAP Installer for Enterprise Linux
+Grant Cohoe (www.grantcohoe.com)
+
+--- Credits ---
+KCRAP by Jonathan Chen (www.spock.org)
+Patches by Dan Fuhry (www.fuhry.us)
+
+--- HowTo ---
+./patch
+./configure --prefix=/usr/local --sysconfdir=/etc CFLAGS=-I/usr/include/et
+make
+make install
+

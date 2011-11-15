@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# KCRAP Patcher
+# 
+# KCRAP by Jonathan Chen (www.spock.org)
+# Patches by Dan Fuhry (www.fuhry.us)
+# This file by Grant Cohoe (www.grantcohoe.com)
+#
+# 11-15-2011
+
+PATCHES=./patches/*.patch
+
+for f in $PATCHES
+do
+	patch -Np1 -i $f
+done
+
