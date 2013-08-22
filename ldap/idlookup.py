@@ -7,25 +7,31 @@ import ldap
 from getpass import getpass
 from string import Template
 
-attributes = ['username','lastname','firstname']
+class directoryserver(object):
+	s_attrs = ['username','lastname','firstname']
 
-class directoryserver:
-	lastname = "sn"
-	firstname = "givenName"
-	givenName = "firstname"
-	sn = "lastname"
+	def __init__(self, i_vals, ld_type):
+		values = {'lastname':'sn', 'firstname':'givenName', 'mode':ld_type}
+		self.set_values(dict(values, **i_vals))
+
+	def set_values(self, values):
+		for k in values:
+			setattr(self, k, values[k])
+			setattr(self, values[k], k)
 
 class ad(directoryserver):
-	bindstring = Template("ldapsearch -x -LLL -e pr=200/noprompt -h $server -D \"$binder\" -W \"$search\" $attrs")
-	username = "sAMAccountName"
-	sAMAccountName = "username"
-	mode = "ad"
+	def __init__(self):
+		values = {'username':'sAMAccountName'}
+		self.bindstring = Template("ldapsearch -x -LLL -e pr=200/noprompt -h $server -D \"$binder\" -W \"$search\" $attrs")
+
+		super(type(self), self).__init__(values, type(self).__name__)
 
 class openldap(directoryserver):
-	bindstring = Template("ldapsearch -x -LLL -h $server -D \"$binder\" -W \"$search\" $attrs")
-	username = "uid"
-	uid = "username"
-	mode = "openldap"
+	def __init__(self):
+		values = {'username':'uid'}
+		self.bindstring = Template("ldapsearch -x -LLL -h $server -D \"$binder\" -W \"$search\" $attrs")
+
+		super(type(self), self).__init__(values, type(self).__name__)
 
 def get_sys_domain():
 	dom = re.sub(r'^(.*?)\.','',os.getenv('HOSTNAME'))
@@ -78,7 +84,7 @@ def get_filter():
 		except ValueError:
 			print "Need to specify a value to search on (ex: username=foo)"
 			quit(1)
-		if k not in attributes:
+		if k not in ld.s_attrs:
 			print "error: attribute "+k+" is not supported"
 			quit(1)
 		u_attrs[getattr(ld,k)] = v
@@ -94,7 +100,7 @@ def get_output_attributes(raw):
 	u_output = str(args.output).split(',')
 	u_print = []
 	for item in u_output:
-		if item not in attributes:
+		if item not in ld.s_attrs:
 			print "error: attribute "+item+" is not supported"
 			quit(1)
 		u_print.append(item)
