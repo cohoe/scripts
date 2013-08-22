@@ -46,7 +46,7 @@ def get_user_password():
 	return pw
 
 def get_args():
-	parser = argparse.ArgumentParser()
+	parser = argparse.ArgumentParser(description="Lookup basic ID information from an LDAP server", epilog="Written by Grant Cohoe (http://grantcohoe.com)")
 	parser.add_argument("-m", "--mode", dest="mode", metavar="MODE", default="ad", help="set ldap mode (ad or openldap)")
 	parser.add_argument("-u", "--user", dest="user", metavar="USER", default=get_sys_user(), help="User to bind as (default: current)")
 	parser.add_argument("-d", "--domain", dest="domain", metavar="DOMAIN", default=get_sys_domain(), help="LDAP domain to search (ex: corp.example.com). Default is system domain.")
@@ -73,7 +73,11 @@ def get_filter():
 	u_input = str(args.input).split(',')
 	u_attrs = {}
 	for item in u_input:
-		(k,v) = item.split('=')
+		try:
+			(k,v) = item.split('=')
+		except ValueError:
+			print "Need to specify a value to search on (ex: username=foo)"
+			quit(1)
 		if k not in attributes:
 			print "error: attribute "+k+" is not supported"
 			quit(1)
@@ -136,15 +140,21 @@ def get_base_dn(domain):
 	return dn
 
 def bind_search():
+	o_attrs = get_output_attributes(1)
+	i_filter = get_filter()
 	pw = get_user_password()
 
 	l = ldap.initialize("ldap://"+get_server())
 	if ld.mode == "ad":
 		l.set_option(ldap.OPT_REFERRALS, 0)
 	l.protocol_version = 3
-	l.simple_bind_s(get_binder(), pw)
+	try:
+		l.simple_bind_s(get_binder(), pw)
+	except ldap.INVALID_CREDENTIALS:
+		print "Invalid LDAP credentials"
+		quit(1)
 
-	r = l.search(get_base_dn(get_domain()), ldap.SCOPE_SUBTREE, get_filter(), get_output_attributes(1))
+	r = l.search(get_base_dn(get_domain()), ldap.SCOPE_SUBTREE, i_filter, o_attrs)
 	type,results = l.result(r,60)
 	if ld.mode == "ad":
 		results.pop()
